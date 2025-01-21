@@ -1,0 +1,30 @@
+# Diretório de estado do Terraform
+.terraform/
+.terraform.lock.hcl
+
+# Arquivos de estado do Terraform
+terraform.tfstate
+terraform.tfstate.backup
+
+# Planos de execução
+*.tfplan
+
+# Variáveis sensíveis
+terraform.tfvars
+*.tfvars.json
+
+# Logs de erro do Terraform
+crash.log
+
+# Configurações locais (não sincronizáveis)
+override.tf
+override.tf.json
+*.override.tf
+*.override.tf.json
+
+# Arquivos de saída (exemplo: de `terraform output`)
+*.out
+
+# Outras configurações ou caches locais
+*.backup
+*.log
