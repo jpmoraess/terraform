@@ -80,7 +80,7 @@ resource "aws_subnet" "jpmoraess_subnet" {
 
 resource "aws_key_pair" "jpmoraess_key_pair" {
   key_name = "jpmoraess_key_pair"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+q63VS42tJMu68zgjnuApCot/yeaqToHEnFMmN6WyFfnxAK9tCYbsiebmnpVErrbpl/lRdTKvRdtlM9KdivZ3i6bJqQJ8bfM1ooRYedoPEeZcfoyldXdw5NRxcViezQL/WycsbWDJljEbEy/4CkIWA+aA0crfomTE1FUGlsGZ5bRTli1PGxYVltDRYoNePeMZh9rIjeJEI6g6IBM7Rae9492R6UUcyybQt+y6pZ0P7li2M7Xk+YCrDbjuzxXf79B2RPag3gW//hUvz9t6LZ/dHytqrGZcIenZ6IJkG99KbeNYUx0pEEToprxXt4eBa7EAIKdYS8NQfadrLXS507Xl jpmoraess"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQChi2el+59NZGaJoQ5QKd0hs0rIv9o+GbD8JqBijmo6QvrmIR9hSu3MX+aoldGi55/0Eyxx9LmguqCLId8FHZSpPcg1xMjETySuRKqO97NeDJOysdFpPTovYyfcSlspCtPIRnabOFXK6FKczkTJd+H79v2I9vu/bmCD+TVxMFZkZFtBvi0fcGtZ8JI5tAU+7k3b4jBIgMuD0C2JiTJRjgkCvO2saCmVClqm+ryxg4EhOG6KFDO4fzn2efztIZzkeLap0yIMzJpcoC3+vkadGUR9fKWZPSbOWw6s+76Zl3/uDQ9634QfqjmFMbnB8Xo7Efk/gC7CpVlgbPpzxsiICMkH jpmoraess@Joaos-iMac-Pro"
 }
 
 resource "aws_instance" "jpmoraess_vm" {
@@ -92,7 +92,7 @@ resource "aws_instance" "jpmoraess_vm" {
   connection {
     type = "ssh"
     user = "ec2-user"
-    private_key = file("C:\\Users\\jpmoraess\\.ssh\\id_rsa")
+    private_key = file("/Users/jpmoraess/.ssh/id_rsa")
     host = self.public_ip
   }
   root_block_device {
