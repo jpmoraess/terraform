@@ -43,8 +43,7 @@ module "eks_admin_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version = "5.34.0"
 
-  role_name = "eks-admin-role"
-
+  role_name   = "eks-admin-role"
   create_role = true
 
   trusted_role_arns = [
@@ -71,17 +70,9 @@ module "eks" {
   authentication_mode = "API"
   access_entries = {
     eks_admin = {
-      kubernetes_groups = ["system:masters"]
+      kubernetes_groups = ["eks-admin"]
       principal_arn     = module.eks_admin_role.iam_role_arn
       type              = "STANDARD"
-      policy_associations = {
-        eks_admin_policy = {
-          policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterAdminPolicy"
-          access_scope = {
-            type = "cluster"
-          }
-        }
-      }
     }
   }
 
