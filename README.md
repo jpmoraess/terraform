@@ -13,3 +13,11 @@ terraform destroy
 # Public Key
 
 ssh-keygen -t rsa -b 2048
+
+
+# EKS
+aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
+
+kubectl cluster-info
+
+kubectl get nodes
