@@ -1,9 +1,11 @@
 provider "aws" {
-  region = var.region
-  profile = "default"
+  region  = var.region
+  profile = "jpmoraess"
 }
 
 data "aws_availability_zones" "available" {}
+
+data "aws_caller_identity" "current" {}
 
 locals {
   cluster_name = "jpmoraess-eks-${random_string.suffix.result}"
@@ -37,6 +39,26 @@ module "vpc" {
   }
 }
 
+module "eks_admin_role" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
+  version = "5.34.0"
+
+  role_name = "eks-admin-role"
+
+  create_role = true
+
+  trusted_role_arns = [
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/jpmoraess"
+  ]
+
+  custom_role_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  ]
+}
+
 module "eks" {
   source                         = "terraform-aws-modules/eks/aws"
   version                        = "20.8.5"
@@ -45,6 +67,23 @@ module "eks" {
   vpc_id                         = module.vpc.vpc_id
   subnet_ids                     = module.vpc.private_subnets
   cluster_endpoint_public_access = true
+
+  authentication_mode = "API"
+  access_entries = {
+    eks_admin = {
+      kubernetes_groups = ["system:masters"]
+      principal_arn     = module.eks_admin_role.iam_role_arn
+      type              = "STANDARD"
+      policy_associations = {
+        eks_admin_policy = {
+          policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
+  }
 
   eks_managed_node_group_defaults = {
     ami_type = "AL2_x86_64"
